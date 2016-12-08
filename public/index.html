@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
     <title>Firebase Demo</title>
     <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/bower/skeleton/css/normalize.css">
@@ -10,21 +10,21 @@
     <link rel="stylesheet" type="text/css" href="/css/bundle.css">
   </head>
   <body>
-    <header class="section">
-      <div class="container">
+    <div class="section">
+      <div class="header container">
         <div class="row">
           <div class="logo eight columns">
             Demo
           </div>
           <div class="four columns">
-            <button id="logout" class="hidden">
+            <button id="logout" class="hidden u-pull-right">
               Logout
               <span id="displayName"></span>
             </button>
           </div>
         </div>
       </div>
-    </header>
+    </div>
     <div class="container" id="welcomeContainer">
       <div class="row">
         <h2>
@@ -42,12 +42,10 @@
     </div>
     <div class="container hidden" id="chat">
       <div class="row">
-        <div class="twelve columns">
+        <div class="chat-form-container twelve columns">
           <form id="chatForm">
-            <input type="text" placeholder="Speak your mind" class="ten columns">
-            <div class="two columns">
-              <button class="button-primary u-pull-right">Send</button>
-            </div>
+            <input type="text" placeholder="Speak your mind" class="">
+            <button class="button-primary">Send</button>
           </form>
         </div>
         <div class="twelve columns">
