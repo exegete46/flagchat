@@ -157,6 +157,13 @@
           chatMessagesRef.on('child_removed', function (data) {
             document.getElementById(data.key).remove();
           });
+          chatMessagesRef.on('child_changed', function (snapshot) {
+            var changedMessage = document.getElementById(snapshot.key);
+            var messageElement = changedMessage.getElementsByTagName('span')[1];
+            if (messageElement) {
+              messageElement.textContent = snapshot.val().text;
+            }
+          });
         } else {
           // No user is signed in.
           var oldMessages = messagesList.getElementsByTagName('li');
