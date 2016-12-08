@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Firebase Demo</title>
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/bower/skeleton/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/bower/skeleton/css/skeleton.css">
+    <link rel="stylesheet" type="text/css" href="/css/bundle.css">
+  </head>
+  <body>
+    <header class="section">
+      <div class="container">
+        <div class="row">
+          <div class="logo eight columns">
+            Demo
+          </div>
+          <div class="four columns">
+            <button id="logout" class="hidden">
+              Logout
+              <span id="displayName"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="container" id="welcomeContainer">
+      <div class="row">
+        <h2>
+          Digital Flagstaff
+        </h2>
+        <p>
+          Welcome to this demo of a Firebase website.  To chat, please login.
+        </p>
+        <p>
+          <button id="login" class="button-primary">
+            Login
+          </button>
+        </p>
+      </div>
+    </div>
+    <div class="container hidden" id="chat">
+      <div class="row">
+        <div class="twelve columns">
+          <form id="chatForm">
+            <input type="text" placeholder="Speak your mind" class="ten columns">
+            <div class="two columns">
+              <button class="button-primary u-pull-right">Send</button>
+            </div>
+          </form>
+        </div>
+        <div class="twelve columns">
+          <ul id="messagesList"></ul>
+        </div>
+      </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
+    <script> <!-- Firebase Init -->
+      var config = {
+        apiKey: 'AIzaSyAactRscFfyWVmkw4Siz7UtOSjMHOGv5ec',
+        authDomain: 'project-3181687864005492685.firebaseapp.com',
+        databaseURL: 'https://project-3181687864005492685.firebaseio.com',
+        storageBucket: 'project-3181687864005492685.appspot.com',
+        messagingSenderId: '735018564010'
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script> <!-- Authentication -->
+      var provider = new firebase.auth.GoogleAuthProvider();
+      var loginLink = document.getElementById('login');
+      var logoutLink = document.getElementById('logout');
+      var welcomeContainer = document.getElementById('welcomeContainer');
+      var displayNameLabel = document.getElementById('displayName');
+      var chatContainer = document.getElementById('chat');
+      loginLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        firebase.auth().signInWithPopup(provider).catch(function (error) {
+          alert("Unable to authenticate: " + error.message);
+        });
+      });
+      logoutLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        var user = firebase.auth().currentUser;
+        firebase.auth().signOut().catch(function (error) {
+          alert("Unable to sign out: " + error.message);
+        });
+      });
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // User is signed in.
+          loginLink.classList.add('hidden');
+          logoutLink.classList.remove('hidden');
+          chatContainer.classList.remove('hidden');
+          welcomeContainer.classList.add('hidden');
+          displayNameLabel.textContent = user.displayName;
+        } else {
+          // No user is signed in.
+          loginLink.classList.remove('hidden');
+          logoutLink.classList.add('hidden');
+          chatContainer.classList.add('hidden');
+          welcomeContainer.classList.remove('hidden');
+        }
+      });
+    </script>
+    <script> <!-- Send chats -->
+      var chatForm = document.getElementById('chatForm');
+      var chatInput = chatForm.getElementsByTagName('input')[0];
+      chatForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var chatMessage = chatInput.value;
+        if (chatMessage != '') {
+          var user = firebase.auth().currentUser;
+          firebase.database().ref('/chats/').push({
+            text: chatMessage,
+            user: user.displayName,
+            avatar: user.photoURL
+          });
+        chatInput.value = "";
+        } else {
+          alert("Enter some text.");
+        }
+      });
+    </script>
+    <script> <!-- Read Todos from Database -->
+      var messagesList = document.getElementById('messagesList');
+      firebase.auth().onAuthStateChanged(function(user) {
+        var chatMessagesRef = firebase.database().ref('/chats/');
+        if (user) {
+          // User is signed in.
+          chatMessagesRef.on('child_added', function (data) {
+            messageReceived(
+              data.key,
+              data.val().user,
+              data.val().avatar,
+              data.val().text
+            );
+          });
+          chatMessagesRef.on('child_removed', function (data) {
+            document.getElementById(data.key).remove();
+          });
+        } else {
+          // No user is signed in.
+          chatMessagesRef.off('child_added');
+          chatMessagesRef.off('child_removed');
+        }
+      });
+
+      var createSpan = function(classes, text) {
+        var span = document.createElement('span');
+        span.classList.add(classes);
+        span.textContent = text;
+        return span;
+      }
+      var messageReceived = function(id, user, imageUrl, message) {
+        var newMessage = document.createElement('li');
+        newMessage.id = id;
+        if (imageUrl) {
+          var avatarImg = document.createElement('img');
+          avatarImg.classList.add('avatar');
+          avatarImg.src = imageUrl;
+          newMessage.append(avatarImg);
+        }
+        newMessage.append(createSpan('user', user));
+        newMessage.append(createSpan('message', message));
+        messagesList.prepend(newMessage);
+      };
+    </script>
+  </body>
+</html>

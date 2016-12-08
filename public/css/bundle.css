@@ -1,0 +1,66 @@
+.hidden {
+  display: none;
+}
+
+header {
+  min-height: 60px;
+  margin-bottom: 25px !important;
+  border-bottom: 1px solid #CCC;
+}
+
+header .logo {
+  font-size: 3rem;
+}
+
+header button {
+  margin-top: 10px;
+}
+@media (min-width: 550px) {
+  header button {
+    float: right;
+  }
+}
+@media (max-width: 550px) {
+  form button {
+    margin-bottom: 25px;
+  }
+  form input {
+    margin-bottom: 5px;
+  }
+}
+
+form button {
+  width: 100%;
+}
+
+ul#messagesList {
+  list-style: none;
+  border: 1px solid #CCC;
+  padding: 0px;
+}
+
+ul#messagesList li {
+  margin: 0px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+}
+
+ul#messagesList li:nth-child(even) {
+  background-color: #DDD;
+}
+
+ul#messagesList li .user {
+  margin-right: 15px;
+  font-style: italic;
+}
+ul#messagesList li .user:after {
+  content: ':';
+}
+
+ul#messagesList li img.avatar {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+  border-radius: 100%;
+}

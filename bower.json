@@ -1,0 +1,22 @@
+{
+  "name": "firebase-demo",
+  "authors": [
+    "Exegete <exegete@mac.com>"
+  ],
+  "description": "Demo for Digital Flagstaff.",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "skeleton": "^2.0.4"
+  }
+}
