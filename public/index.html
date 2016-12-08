@@ -142,8 +142,8 @@
     </script>
     <script> <!-- Read Messages from Database -->
       var messagesList = document.getElementById('messagesList');
+      var chatMessagesRef = firebase.database().ref('/chats/');
       firebase.auth().onAuthStateChanged(function(user) {
-        var chatMessagesRef = firebase.database().ref('/chats/');
         if (user) {
           // User is signed in.
           chatMessagesRef.on('child_added', function (data) {
@@ -159,8 +159,10 @@
           });
         } else {
           // No user is signed in.
-          chatMessagesRef.off('child_added');
-          chatMessagesRef.off('child_removed');
+          var oldMessages = messagesList.getElementsByTagName('li');
+          while (oldMessages.length > 0) {
+            oldMessages[0].remove();
+          }
         }
       });
 
