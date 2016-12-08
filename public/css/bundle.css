@@ -42,7 +42,7 @@ form input {
 
 ul#messagesList {
   list-style: none;
-  border: 1px solid #D1D1D1;
+  /*border: 1px solid #D1D1D1;*/
   padding: 0px;
   border-radius: 4px;
   margin: 0px;
@@ -50,9 +50,20 @@ ul#messagesList {
 
 ul#messagesList li {
   margin: 0px;
-  padding: 8px;
-  display: flex;
-  align-items: center;
+  margin-left: 35px;
+  border: 1px solid #33C3F0;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  min-height: 30px;
+  align-content: center;
+  padding: 5px 2px 0px 5px;
+}
+ul#messagesList li img {
+  position: absolute;
+  left: 0px;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
 }
 
 ul#messagesList li:nth-child(even) {
@@ -61,15 +72,9 @@ ul#messagesList li:nth-child(even) {
 
 ul#messagesList li .user {
   margin-right: 15px;
-  font-style: italic;
+  font-weight: bold;
+  white-space: nowrap;
 }
 ul#messagesList li .user:after {
   content: ':';
-}
-
-ul#messagesList li img.avatar {
-  width: 30px;
-  height: 30px;
-  margin-right: 8px;
-  border-radius: 100%;
 }
