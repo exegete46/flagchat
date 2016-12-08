@@ -2,7 +2,13 @@
   "rules": {
     "chats": {
       ".read": "auth != null",
-      ".write": "auth != null"
+      "$message_id": {
+      	".write": "!data.exists() && newData.exists()",
+        ".validate": "newData.hasChildren(['text', 'user', 'avatar'])",
+        "user": {
+          ".validate": "newData.val() === auth.token.name"
+        }
+      }
     }
   }
 }
