@@ -120,7 +120,7 @@
         }
       });
     </script>
-    <script> <!-- Read Todos from Database -->
+    <script> <!-- Read Messages from Database -->
       var messagesList = document.getElementById('messagesList');
       firebase.auth().onAuthStateChanged(function(user) {
         var chatMessagesRef = firebase.database().ref('/chats/');
