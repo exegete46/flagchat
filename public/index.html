@@ -34,8 +34,14 @@
           Welcome to this demo of a Firebase website.  To chat, please login.
         </p>
         <p>
-          <button id="login" class="button-primary">
-            Login
+          <button id="googleLogin" class="button-primary">
+            Login with Google
+          </button>
+          <button id="facebookLogin" class="button-primary">
+            Login with Facebook
+          </button>
+          <button id="twitterLogin" class="button-primary">
+            Login with Twitter
           </button>
         </p>
       </div>
@@ -65,14 +71,30 @@
       firebase.initializeApp(config);
     </script>
     <script> <!-- Authentication -->
-      var provider = new firebase.auth.GoogleAuthProvider();
-      var loginLink = document.getElementById('login');
+      var googleLoginLink = document.getElementById('googleLogin');
+      var facebookLoginLink = document.getElementById('facebookLogin');
+      var twitterLoginLink = document.getElementById('twitterLogin');
       var logoutLink = document.getElementById('logout');
       var welcomeContainer = document.getElementById('welcomeContainer');
       var displayNameLabel = document.getElementById('displayName');
       var chatContainer = document.getElementById('chat');
-      loginLink.addEventListener('click', function (e) {
+      googleLoginLink.addEventListener('click', function (e) {
         e.preventDefault();
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).catch(function (error) {
+          alert("Unable to authenticate: " + error.message);
+        });
+      });
+      facebookLoginLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        var provider = new firebase.auth.FacebookAuthProvider();
+        firebase.auth().signInWithPopup(provider).catch(function (error) {
+          alert("Unable to authenticate: " + error.message);
+        });
+      });
+      twitterLoginLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        var provider = new firebase.auth.TwitterAuthProvider();
         firebase.auth().signInWithPopup(provider).catch(function (error) {
           alert("Unable to authenticate: " + error.message);
         });
@@ -87,14 +109,12 @@
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           // User is signed in.
-          loginLink.classList.add('hidden');
           logoutLink.classList.remove('hidden');
           chatContainer.classList.remove('hidden');
           welcomeContainer.classList.add('hidden');
           displayNameLabel.textContent = user.displayName;
         } else {
           // No user is signed in.
-          loginLink.classList.remove('hidden');
           logoutLink.classList.add('hidden');
           chatContainer.classList.add('hidden');
           welcomeContainer.classList.remove('hidden');
