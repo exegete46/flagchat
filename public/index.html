@@ -182,6 +182,7 @@
       var messageReceived = function(id, user, imageUrl, message) {
         var newMessage = document.createElement('li');
         newMessage.id = id;
+        newMessage.classList.add('init');
         if (imageUrl) {
           var avatarImg = document.createElement('img');
           avatarImg.classList.add('avatar');
@@ -191,6 +192,9 @@
         newMessage.append(createSpan('user', user));
         newMessage.append(createSpan('message', message));
         messagesList.prepend(newMessage);
+        setTimeout(function() {
+          newMessage.classList.remove('init');
+        }, 0);
       };
     </script>
   </body>
