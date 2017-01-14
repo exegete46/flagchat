@@ -1,0 +1,7 @@
+{
+  "name": "flagchat",
+  "short_name": "flagchat",
+  "description": "Example chat application for Digital Flagstaff meetup.",
+  "start_url": "/",
+  "display": "standalone"
+}

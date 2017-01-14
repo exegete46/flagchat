@@ -1,22 +1,17 @@
 {
-  "name": "firebase-demo",
-  "authors": [
-    "Exegete <exegete@mac.com>"
-  ],
-  "description": "Demo for Digital Flagstaff.",
-  "main": "",
-  "license": "MIT",
-  "homepage": "",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "public/bower/",
-    "test",
-    "tests"
-  ],
+  "name": "flagchat",
+  "description": "Example chat application for Digital Flagstaff meetup.",
+  "main": "index.html",
   "dependencies": {
-    "skeleton": "^2.0.4"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "app-layout": "PolymerElements/app-layout#^0.10.6",
+    "polymerfire": "firebase/polymerfire#^0.10.3",
+    "paper-button": "PolymerElements/paper-button#^1.0.14"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }
 }
