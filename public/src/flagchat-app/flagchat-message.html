@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower/paper-card/paper-card.html">
+<dom-module id="flagchat-message">
+    <template>
+      <style>
+        paper-card {
+          width: 100%;
+          margin-bottom: 10px;
+          --paper-card-header: {
+            display: none;
+          };
+        }
+        paper-card img {
+          width: 25px;
+          height: 25px;
+          margin-right: 10px;
+          border-radius: 100%;
+        }
+        paper-card span {
+          font-weight: bold;
+          margin-right: 5px;
+        }
+        paper-card span:after {
+          content: ":"
+        }
+
+      </style>
+      <paper-card>
+        <div class="card-content">
+          <img src="[[message.avatar]]" alt="[[message.user]]'s avatar" align="left">
+          <span>{{message.user}}</span>
+          {{message.text}}
+        </div>
+      </paper-card>
+      <!--<div class="message">
+        <img src="{{message.avatar}}" align="left" alt="avatar - {{ message.user }}">
+        <span class="user">
+          {{ message.user }}
+        </span>
+        {{ message.text }}
+      </div>-->
+    </template>
+    <script>
+        Polymer({
+            is: 'flagchat-message',
+            properties: {
+                message: {
+                    type: Object
+                }
+            },
+        });
+    </script>
+</dom-module>

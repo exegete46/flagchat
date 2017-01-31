@@ -1,0 +1,34 @@
+<link rel="import" href="../../bower/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower/paper-button/paper-button.html">
+
+
+<dom-module id="flagchat-logout">
+    <template>
+      <style>
+        paper-button[inverse] {
+          color: var(--app-primary-color);
+          background-color: #fff;
+        }
+      </style>
+      <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+      <paper-button inverse raised on-tap="signOut">
+          <iron-icon icon="lock-outline">
+          </iron-icon>
+          &nbsp;
+          {{user.displayName}}
+      </paper-button>
+    </template>
+    <script>
+        Polymer({
+            is: 'flagchat-logout',
+            properties: {
+                users: {
+                    type: Object
+                }
+            },
+            signOut: function() {
+                this.$.auth.signOut();
+            }
+        });
+    </script>
+</dom-module>

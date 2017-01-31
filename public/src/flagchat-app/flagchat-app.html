@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower/polymer/polymer.html">
+<link rel="import" href="../../bower/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower/paper-button/paper-button.html">
+<link rel="import" href="../../bower/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower/iron-icons/iron-icons.html">
+<link rel="import" href="flagchat-messages.html">
+<link rel="import" href="flagchat-login.html">
+<link rel="import" href="flagchat-logout.html">
+
+<dom-module id="flagchat-app">
+    <template>
+    <style>
+      :host {
+        --app-primary-color: #4285f4;
+        --app-secondary-color: black;
+
+        display: block;
+      }
+      app-header {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }
+      .content {
+        margin: 10px;
+      }
+    </style>
+    <firebase-app id="firebase"
+      auth-domain="project-3181687864005492685.firebaseapp.com"
+      database-url="https://project-3181687864005492685.firebaseio.com"
+      api-key="AIzaSyAactRscFfyWVmkw4Siz7UtOSjMHOGv5ec"
+      storage-bucket="project-3181687864005492685.appspot.com"
+      messaging-sender-id="735018564010">
+    </firebase-app>
+    <firebase-auth user="{{user}}"></firebase-auth>
+    <app-header-layout>
+      <app-header condenses sticky>
+        <app-toolbar>
+          <div main-title>Flag Chat</div>
+          <flagchat-logout hidden$=[[!user]]></flagchat-logout>
+        </app-toolbar>
+      </app-header>
+      <div class="content">
+        <h1>Flag Chat - Digital Flagstaff</h1>
+        <flagchat-login hidden=[[user]]></flagchat-login>
+        <flagchat-messages hidden$=[[!user]]></flagchat-messages>
+      </div>
+    </app-header-layout>
+  </template>
+
+    <script>
+        Polymer({
+            is: 'flagchat-app',
+            properties: {
+                provider: String,
+                user: {
+                    type: Object
+                }
+            }
+        });
+    </script>
+</dom-module>

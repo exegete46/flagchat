@@ -1,0 +1,45 @@
+<link rel="import" href="../../bower/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower/paper-button/paper-button.html">
+
+<dom-module id="flagchat-login">
+    <template>
+        <style>
+          paper-button {
+            color: #fff;
+            background-color: var(--app-primary-color);
+          }
+        </style>
+        <firebase-auth id="auth" user="{{user}}" provider="{{provider}}"></firebase-auth>
+        <paper-button raised on-tap="signInWithGoogle">Login with Google</paper-button>
+        <paper-button raised on-tap="signInWithFacebook">Login with Facebook</paper-button>
+        <paper-button raised on-tap="signInWithTwitter">Login with Twitter</paper-button>
+    </template>
+    <script>
+        Polymer({
+            is: 'flagchat-login',
+            properties: {
+                user: {
+                    type: Object,
+                }
+            },
+            signOut: function(e) {
+                this.$.auth.signOut();
+            },
+            signInWithGoogle: function(e) {
+                this.provider = "google";
+                this.signIn();
+            },
+            signInWithFacebook: function(e) {
+                this.provider = "facebook";
+                this.signIn();
+            },
+            signInWithTwitter: function(e) {
+                this.provider = "twitter";
+                this.signIn();
+            },
+            signIn: function() {
+                this.$.auth.signInWithPopup();
+            }
+        });
+    </script>
+</dom-module>

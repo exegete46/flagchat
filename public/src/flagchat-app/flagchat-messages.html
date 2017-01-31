@@ -1,0 +1,87 @@
+<link rel="import" href="../../bower/iron-form/iron-form.html">
+<link rel="import" href="../../bower/paper-button/paper-button.html">
+<link rel="import" href="../../bower/paper-input/paper-input.html">
+<link rel="import" href="../../bower/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower/polymerfire/firebase-query.html">
+<link rel="import" href="flagchat-message.html">
+
+<dom-module id="flagchat-messages">
+    <template>
+        <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+        <firebase-query
+            id="query"
+            path="chats"
+            data="{{messages}}"
+            user="{{user}}"
+           ></firebase-query>
+        <style>
+            :host {
+                display: block;
+            }
+            paper-input {
+                width: 100%;
+                color: var(--app-primary-color);
+            }
+            form {
+                margin-bottom: 15px;
+            }
+        </style>
+        <form is="iron-form" id="form">
+            <paper-input id="input" label="Send a message...">
+                <div suffix>
+                    <paper-icon-button icon="send" on-tap="send" alt="send chat"></paper-icon-button>
+                </div>
+            </paper-input>
+        </form>
+        <template
+            id="messages"
+            hidden$=[[user]]
+            items="[[messages]]"
+            is="dom-repeat"
+            as="message"
+            sort="sortMessages"
+          observe="ts text">
+            <flagchat-message message="{{message}}"></flagchat-message>
+        </template>
+    </template>
+    <script>
+        Polymer({
+            is: 'flagchat-messages',
+            properties: {
+                messages: {
+                    type: Object,
+                },
+                user: {
+                    type: Object
+                }
+            },
+            attached: function() {
+                var ele = this;
+                form.addEventListener('iron-form-presubmit', function(e) {
+                    ele.send(e)
+                });
+            },
+            sortMessages: function(a, b) {
+                return b.ts - a.ts;
+            },
+            send: function(e, a) {
+                e.preventDefault();
+                var inputVal = this.$.input.value;
+                if (inputVal === "") {
+                    alert("Please input a message.");
+                    return;
+                }
+                // firebase.database.ServerValue.TIMESTAMP
+                var message = {
+                    text: this.$.input.value,
+                    avatar: this.user.photoURL,
+                    user: this.user.displayName,
+                    ts: firebase.database.ServerValue.TIMESTAMP
+                };
+                this.$.input.value = "";
+                this.$.query.ref.push(message);
+            }
+        });
+    </script>
+</dom-module>

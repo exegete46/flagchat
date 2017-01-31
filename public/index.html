@@ -1,201 +1,25 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
-    <title>Firebase Demo</title>
-    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="/bower/skeleton/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="/bower/skeleton/css/skeleton.css">
-    <link rel="stylesheet" type="text/css" href="/css/bundle.css">
-  </head>
-  <body>
-    <div class="section">
-      <div class="header container">
-        <div class="row">
-          <div class="logo eight columns">
-            Demo
-          </div>
-          <div class="four columns">
-            <button id="logout" class="hidden u-pull-right">
-              Logout
-              <span id="displayName"></span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container" id="welcomeContainer">
-      <div class="row">
-        <h2>
-          Digital Flagstaff
-        </h2>
-        <p>
-          Welcome to this demo of a Firebase website.  To chat, please login.
-        </p>
-        <p>
-          <button id="googleLogin" class="button-primary">
-            Login with Google
-          </button>
-          <button id="facebookLogin" class="button-primary">
-            Login with Facebook
-          </button>
-          <button id="twitterLogin" class="button-primary">
-            Login with Twitter
-          </button>
-        </p>
-      </div>
-    </div>
-    <div class="container hidden" id="chat">
-      <div class="row">
-        <div class="chat-form-container twelve columns">
-          <form id="chatForm">
-            <input type="text" placeholder="Speak your mind" class="">
-            <button class="button-primary">Send</button>
-          </form>
-        </div>
-        <div class="twelve columns">
-          <ul id="messagesList"></ul>
-        </div>
-      </div>
-    </div>
-    <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
-    <script> <!-- Firebase Init -->
-      var config = {
-        apiKey: 'AIzaSyAactRscFfyWVmkw4Siz7UtOSjMHOGv5ec',
-        authDomain: 'project-3181687864005492685.firebaseapp.com',
-        databaseURL: 'https://project-3181687864005492685.firebaseio.com',
-        storageBucket: 'project-3181687864005492685.appspot.com',
-        messagingSenderId: '735018564010'
-      };
-      firebase.initializeApp(config);
-    </script>
-    <script> <!-- Authentication -->
-      var googleLoginLink = document.getElementById('googleLogin');
-      var facebookLoginLink = document.getElementById('facebookLogin');
-      var twitterLoginLink = document.getElementById('twitterLogin');
-      var logoutLink = document.getElementById('logout');
-      var welcomeContainer = document.getElementById('welcomeContainer');
-      var displayNameLabel = document.getElementById('displayName');
-      var chatContainer = document.getElementById('chat');
-      googleLoginLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).catch(function (error) {
-          alert("Unable to authenticate: " + error.message);
-        });
-      });
-      facebookLoginLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        var provider = new firebase.auth.FacebookAuthProvider();
-        firebase.auth().signInWithPopup(provider).catch(function (error) {
-          alert("Unable to authenticate: " + error.message);
-        });
-      });
-      twitterLoginLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        var provider = new firebase.auth.TwitterAuthProvider();
-        firebase.auth().signInWithPopup(provider).catch(function (error) {
-          alert("Unable to authenticate: " + error.message);
-        });
-      });
-      logoutLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        var user = firebase.auth().currentUser;
-        firebase.auth().signOut().catch(function (error) {
-          alert("Unable to sign out: " + error.message);
-        });
-      });
-      firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          // User is signed in.
-          logoutLink.classList.remove('hidden');
-          chatContainer.classList.remove('hidden');
-          welcomeContainer.classList.add('hidden');
-          displayNameLabel.textContent = user.displayName;
-        } else {
-          // No user is signed in.
-          logoutLink.classList.add('hidden');
-          chatContainer.classList.add('hidden');
-          welcomeContainer.classList.remove('hidden');
-        }
-      });
-    </script>
-    <script> <!-- Send chats -->
-      var chatForm = document.getElementById('chatForm');
-      var chatInput = chatForm.getElementsByTagName('input')[0];
-      chatForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var chatMessage = chatInput.value;
-        if (chatMessage != '') {
-          var user = firebase.auth().currentUser;
-          firebase.database().ref('/chats/').push({
-            text: chatMessage,
-            user: user.displayName,
-            avatar: user.photoURL
-          });
-        chatInput.value = "";
-        } else {
-          alert("Enter some text.");
-        }
-      });
-    </script>
-    <script> <!-- Read Messages from Database -->
-      var messagesList = document.getElementById('messagesList');
-      var chatMessagesRef = firebase.database().ref('/chats/');
-      firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          // User is signed in.
-          chatMessagesRef.on('child_added', function (data) {
-            messageReceived(
-              data.key,
-              data.val().user,
-              data.val().avatar,
-              data.val().text
-            );
-          });
-          chatMessagesRef.on('child_removed', function (data) {
-            document.getElementById(data.key).remove();
-          });
-          chatMessagesRef.on('child_changed', function (snapshot) {
-            var changedMessage = document.getElementById(snapshot.key);
-            var messageElement = changedMessage.getElementsByTagName('span')[1];
-            if (messageElement) {
-              messageElement.textContent = snapshot.val().text;
-            }
-          });
-        } else {
-          // No user is signed in.
-          var oldMessages = messagesList.getElementsByTagName('li');
-          while (oldMessages.length > 0) {
-            oldMessages[0].remove();
-          }
-        }
-      });
+<!doctype html>
+<html lang="en">
 
-      var createSpan = function(classes, text) {
-        var span = document.createElement('span');
-        span.classList.add(classes);
-        span.textContent = text;
-        return span;
-      }
-      var messageReceived = function(id, user, imageUrl, message) {
-        var newMessage = document.createElement('li');
-        newMessage.id = id;
-        newMessage.classList.add('init');
-        if (imageUrl) {
-          var avatarImg = document.createElement('img');
-          avatarImg.classList.add('avatar');
-          avatarImg.src = imageUrl;
-          newMessage.append(avatarImg);
-        }
-        newMessage.append(createSpan('user', user));
-        newMessage.append(createSpan('message', message));
-        messagesList.prepend(newMessage);
-        setTimeout(function() {
-          newMessage.classList.remove('init');
-        }, 0);
-      };
-    </script>
-  </body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>Flag Chat</title>
+    <meta name="description" content="Example chat application for the Digital Flagstaff meetup.">
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
+
+    <script src="/bower/webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="/src/flagchat-app/flagchat-app.html">
+    <link rel="stylesheet" type="text/css" href="/css/bundle.css">
+
+</head>
+
+<body>
+    <flagchat-app></flagchat-app>
+</body>
+
 </html>
